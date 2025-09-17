@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mood2Music Bot</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(120deg, #f6d365, #fda085);
+      text-align: center;
+      padding: 40px;
+      color: #fff;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 10px;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+    }
+
+    p {
+      font-size: 1.1em;
+    }
+
+    select, button {
+      padding: 12px 20px;
+      margin: 10px;
+      border-radius: 10px;
+      border: none;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #ff4081;
+      color: #fff;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background-color: #e73370;
+    }
+
+    .song-box {
+      margin-top: 30px;
+      padding: 25px;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(5px);
+      box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .song-box h2, 
+    .song-box p {
+      color: black;
+    }
+
+    .song-box a {
+      color: #6c63ff;
+      font-weight: bold;
+      text-decoration: none;
+    }
+
+    .song-box a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎵 Mood2Music Bot</h1>
+  <p>Choose your <b>Language</b> and <b>Mood</b> to get a song recommendation!</p>
+
+  <label for="language">Language:</label>
+  <select id="language">
+    <option value="english">English</option>
+    <option value="hindi">Hindi</option>
+    <option value="marathi">Marathi</option>
+  </select>
+
+  <label for="mood">Mood:</label>
+  <select id="mood">
+    <option value="happy">Happy</option>
+    <option value="sad">Sad</option>
+    <option value="energetic">Energetic</option>
+    <option value="romantic">Romantic</option>
+    <option value="stress">Stress</option>
+    <option value="motivational">Motivational</option>
+    <option value="party">Party</option>
+  </select>
+
+  <br>
+  <button onclick="getSong()">Get Song 🎵</button>
+
+  <div id="result" class="song-box"></div>
+
+  <script>
+    const songs = {
+      happy: {
+        english: [
+          ["Happy - Pharrell Williams", "https://youtu.be/ZbZSe6N_BXs"],
+          ["Gangnam Style - PSY", "https://youtu.be/9bZkp7q19f0"],
+          ["Can't Stop the Feeling - Justin Timberlake", "https://youtu.be/ru0K8uYEZWw"]
+        ],
+        hindi: [
+          ["Kar Gayi Chull - Kapoor & Sons", "https://youtu.be/HoCwa6gnmM0"],
+          ["London Thumakda - Queen", "https://youtu.be/kkKcgUvxBuo"],
+          ["The Breakup Song - Ae Dil Hai Mushkil", "https://youtu.be/3B7xkTqDg0Y"]
+        ],
+        marathi: [
+          ["Zingat - Sairat", "https://youtu.be/oNXiZ0Nv0XQ"],
+          ["Kombdi Palali - Jatra", "https://youtu.be/wdM7athAem0"],
+          ["Apsara Aali - Natarang", "https://youtu.be/g3c7y2-dg0M"]
+        ]
+      },
+      sad: {
+        english: [
+          ["Someone Like You - Adele", "https://youtu.be/Ry7B_5S-4x0"],
+          ["Hello - Adele", "https://youtu.be/YQHsXMglC9A"],
+          ["Stay - Rihanna ft. Mikky Ekko", "https://youtu.be/7UthJ2zK69E"]
+        ],
+        hindi: [
+          ["Channa Mereya - Ae Dil Hai Mushkil", "https://youtu.be/Jxz5cQxg3Ck"],
+          ["Agar Tum Saath Ho - Tamasha", "https://youtu.be/fgTLdpD8xOs"],
+          ["Tujhe Kitna Chahne Lage - Kabir Singh", "https://youtu.be/gVvJwMG2RWA"]
+        ],
+        marathi: [
+          ["Kitida Navyane - Timepass 2", "https://youtu.be/jP0RD1C-GtM"],
+          ["Hi Poli Saajuk Tupatali", "https://youtu.be/5hFDR4m0b6Q"]
+        ]
+      },
+      energetic: {
+        english: [
+          ["Eye of the Tiger - Survivor", "https://youtu.be/btPJPFnesV4"],
+          ["Stronger - Kanye West", "https://youtu.be/PsO6ZnUZI0g"]
+        ],
+        hindi: [
+          ["Malhari - Bajirao Mastani", "https://youtu.be/1bIfm09shsY"],
+          ["Jai Jai Shivshankar - War", "https://youtu.be/7gOkLsv0rDk"]
+        ],
+        marathi: [
+          ["Apsara Aali - Natarang", "https://youtu.be/g3c7y2-dg0M"],
+          ["Hi Poli Saajuk Tupatali", "https://youtu.be/5hFDR4m0b6Q"]
+        ]
+      },
+      romantic: {
+        english: [
+          ["Perfect - Ed Sheeran", "https://youtu.be/2Vv-BfVoq4g"],
+          ["Shape of You - Ed Sheeran", "https://youtu.be/JGwWNGJdvx8"]
+        ],
+        hindi: [
+          ["Tera Ban Jaunga - Kabir Singh", "https://youtu.be/bT7aJ4kMfFo"],
+          ["Raabta - Agent Vinod", "https://youtu.be/QdX4vTUMxF0"]
+        ],
+        marathi: [
+          ["Mala Ved Lagale - Sairat", "https://youtu.be/0lqJ_6kFwn0"]
+        ]
+      },
+      stress: {
+        english: [
+          ["Weightless - Marconi Union", "https://youtu.be/UfcAVejslrU"]
+        ],
+        hindi: [
+          ["Shanti Mantra", "https://youtu.be/6uSpk9J5jD0"]
+        ],
+        marathi: [
+          ["Shant Dnyaneshwari", "https://youtu.be/M4V9wM0T2tk"]
+        ]
+      },
+      motivational: {
+        english: [
+          ["Don't Stop Me Now - Queen", "https://youtu.be/HgzGwKwLmgM"]
+        ],
+        hindi: [
+          ["Zinda - Bhaag Milkha Bhaag", "https://youtu.be/LhP9_HtO1UQ"]
+        ],
+        marathi: [
+          ["Jai Bhavani - Lokgeet", "https://youtu.be/7Z3o9wKz5uQ"]
+        ]
+      },
+      party: {
+        english: [
+          ["Uptown Funk - Bruno Mars", "https://youtu.be/OPf0YbXqDm0"]
+        ],
+        hindi: [
+          ["Aankh Marey - Simmba", "https://youtu.be/ZW1r0UR10Q0"]
+        ],
+        marathi: [
+          ["Chikni Chameli", "https://youtu.be/0rYpiU5zQCM"]
+        ]
+      }
+    };
+
+    let lastSongIndex = {}; // to avoid immediate repeats
+
+    function getSong() {
+      const language = document.getElementById("language").value;
+      const mood = document.getElementById("mood").value;
+
+      if (songs[mood] && songs[mood][language].length > 0) {
+        const options = songs[mood][language];
+
+        let randomIndex;
+        do {
+          randomIndex = Math.floor(Math.random() * options.length);
+        } while (options.length > 1 && lastSongIndex[mood + language] === randomIndex);
+
+        lastSongIndex[mood + language] = randomIndex;
+        const song = options[randomIndex];
+
+        document.getElementById("result").innerHTML = `
+          <h2>🎵 Suggested Song:</h2>
+          <p><b>${song[0]}</b></p>
+          <a href="${song[1]}" target="_blank">🔗 Listen on YouTube</a>
+        `;
+      } else {
+        document.getElementById("result").innerHTML = `
+          <p>❌ Sorry! No songs available for this mood in selected language.</p>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
